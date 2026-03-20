@@ -32,7 +32,7 @@ uv run --env-file .env worker.py
 
 ## 3.测试
 
-test.ipynb
+[test.ipynb](https://github.com/wuzhiping/cattle/edit/main/agents/test.ipynb)
 
 ---
 
@@ -64,7 +64,7 @@ Arguments: run --env-file .env worker.py
 
 - 启动服务
 ```
-.\nssm start [service name]
+nssm start [service name]
 ```
 
 - 停止服务
@@ -84,7 +84,7 @@ nssm remove [service name] confirm
 
 - 编辑服务
 ```
-.\nssm edit [service name]
+nssm edit [service name]
 ```
 
 
