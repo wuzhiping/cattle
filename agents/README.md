@@ -32,7 +32,7 @@ uv run --env-file .env worker.py
 
 ## 3.测试
 
-[test.ipynb](https://github.com/wuzhiping/cattle/edit/main/agents/test.ipynb)
+查看test.ipynb
 
 ---
 
@@ -46,7 +46,7 @@ uv run --env-file .env worker.py
 ### 以管理员运行 PowerShell，打开NSSM的win64的文件夹，可执行以下命令：
 - 安装服务
 ```
-.\nssm install [service name]
+nssm install [service name]
 ```
 调出设置窗体:
 - Path: 可执行文件完整路径
