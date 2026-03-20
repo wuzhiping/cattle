@@ -1,10 +1,55 @@
 from temporalio import activity
 
-from .ptflow import pocketflow
-from .ocagent import OpenCodeAgent
+from utils.ptflow import pocketflow
+from utils.oc_agent import OpenCodeAgent
+from utils.get_config import Config
+from utils.blowfish_ctr import decrypt
 
 import os
+import json
+import time
 import psutil
+
+# 解密和验证
+async def _decrypt_and_verify(encrypted: str, max_gap: int = 180) -> dict:
+    try:
+        # 获取key
+        config = await Config().fetch()
+        _key = config.get("temporal").get("task_queue")
+        
+        # 解密
+        plaintext = decrypt(str(_key), encrypted)
+        
+    except Exception as e:
+        raise CryptoError(f"解密失败: {e}")
+
+    # 分割字符串
+    if "at" not in plaintext:
+        raise ValueError("格式错误：缺少 'at' 分隔符")
+    
+    # 从末尾找最后一个 "at"（防止 JSON 内容中也有 "at"）
+    json_str, timestamp_str = plaintext.rsplit("at", 1)
+    
+    # 解析时间戳
+    stored_timestamp = int(timestamp_str)
+    
+    # 获取当前时间
+    current_timestamp = int(time.time())
+    # print("activity current time", current_timestamp)
+
+    # 绝对值间隔
+    gap = abs(current_timestamp - stored_timestamp)  
+    # print(f"间隔: {gap}秒")
+    
+    # 判断是否超时
+    if gap > max_gap:
+        raise RuntimeError(f"时间戳间隔过大！间隔 {gap} 秒，超过最大允许 {max_gap} 秒")
+    
+    # 解析原始数据
+    data = json.loads(json_str)
+
+    return data
+
 
 @activity.defn(name="OP")
 async def OP(payload) -> dict:
@@ -15,13 +60,14 @@ async def OP(payload) -> dict:
     #     "question": "当前工作目录中的文件"
     # }
 
-    dirt = payload.get("dir")
-    qt = payload.get("question")
+    dec = await _decrypt_and_verify(payload)
+    dirt = dec.get("dir")
+    qt = dec.get("question")
     
     agent = OpenCodeAgent(directory=dirt)
-    output = agent.run_stream(qt)  # 直接是字符串
+    output = agent.run_stream(qt) 
     
-    print(output)  # ✅ 直接打印
+    print(output) 
     
     return {
         "stdout": output,
@@ -41,7 +87,8 @@ async def PT(payload) -> dict:
     #     }
     # }
     
-    shared =   payload.get("shared",{})
+    dec = await _decrypt_and_verify(payload)
+    shared =   dec.get("shared",{})
     
     try:
         result = pocketflow(shared) 

@@ -5,7 +5,7 @@ from temporalio import workflow
 @workflow.defn
 class OPflow:
     @workflow.run
-    async def run(self, payload: dict) -> dict:
+    async def run(self, payload: str) -> dict:
         data = await workflow.execute_activity(
             "OP",
             payload,
@@ -16,7 +16,7 @@ class OPflow:
 @workflow.defn
 class PTflow:
     @workflow.run
-    async def run(self, payload: dict) -> dict:
+    async def run(self, payload: str) -> dict:
         data = await workflow.execute_activity(
             "PT",
             payload,
@@ -28,7 +28,7 @@ class PTflow:
 @workflow.defn
 class AuditFlow:
     @workflow.run
-    async def run(self, payload: dict) -> dict:
+    async def run(self, payload: str) -> dict:
         data = await workflow.execute_activity(
             "Audit",
             payload,

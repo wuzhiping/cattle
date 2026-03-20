@@ -6,7 +6,10 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "aiohttp>=3.13.3",
+    "ansi2html>=1.9.2",
+    "nats-py>=2.14.0",
     "pocketflow>=0.0.3",
     "psutil>=7.2.2",
+    "pycryptodome>=3.23.0",
     "temporalio>=1.18.2",
 ]
