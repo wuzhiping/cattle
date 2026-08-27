@@ -5,7 +5,7 @@
 
     <description>Cattle Agents Service</description>
 
-    <executable>%BASE%\..\..\..\uv\uv.exe</executable>
+    <executable>%BASE%\..\..\uv\uv.exe</executable>
 
     <arguments>run python main.py</arguments>
 
