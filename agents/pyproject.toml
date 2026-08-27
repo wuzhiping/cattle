@@ -7,6 +7,7 @@ requires-python = ">=3.9"
 dependencies = [
     "aiohttp>=3.13.3",
     "ansi2html>=1.9.2",
+    "jupyterlab>=4.5.10",
     "nats-py>=2.14.0",
     "pocketflow>=0.0.3",
     "psutil>=7.2.2",
