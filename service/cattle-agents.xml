@@ -1,0 +1,26 @@
+<service>
+    <id>cattle-agents</id>
+
+    <name>Cattle Agents</name>
+
+    <description>Cattle Agents Service</description>
+
+    <executable>%BASE%\..\..\..\uv\uv.exe</executable>
+
+    <arguments>run python main.py</arguments>
+
+    <workingdirectory>%BASE%\..\agents</workingdirectory>
+
+    <logpath>%BASE%\logs</logpath>
+
+    <log mode="roll">
+        <sizeThreshold>10485760</sizeThreshold>
+        <keepFiles>5</keepFiles>
+    </log>
+
+    <onfailure action="restart" delay="10 sec"/>
+
+    <stoptimeout>30 sec</stoptimeout>
+
+    <startmode>Automatic</startmode>
+</service>
